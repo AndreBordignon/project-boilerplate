@@ -1,9 +1,5 @@
 # Resumo do Boilerplate Criado
 
-## 📋 O que foi criado
-
-Um boilerplate completo e profissional baseado no conteúdo do site **resolvcondominios.com.br**.
-
 ### ✨ Funcionalidades Implementadas
 
 #### Frontend (React + TypeScript)
