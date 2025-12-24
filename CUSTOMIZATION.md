@@ -1,23 +1,12 @@
-# Guia de Customização
 
-Este documento explica como adaptar o boilerplate para o seu projeto específico.
-
-## Conteúdo Baseado em resolvcondominios.com.br
-
-O boilerplate foi estruturado com base nas páginas e funcionalidades do site Resolv Condomínios:
 
 ### Páginas Implementadas
 
 1. **Home** (`frontend/src/pages/Home/Home.tsx`)
    - Seção hero/destaque
-   - Cards de serviços (Comerciais, Residenciais, Área do Síndico)
    - Customize os textos e adicione seu conteúdo
 
 2. **Sobre** (`frontend/src/pages/About/About.tsx`)
-   - História da empresa
-   - Missão
-   - Valores
-   - Adicione informações específicas do seu cliente
 
 3. **Serviços** (`frontend/src/pages/Services/Services.tsx`)
    - Três categorias principais de serviços
