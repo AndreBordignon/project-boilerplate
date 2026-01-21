@@ -18,6 +18,8 @@ export interface AuthResponse {
     id: string
     name: string
     email: string
+    createdAt: string
+    updatedAt: string
   }
 }
 

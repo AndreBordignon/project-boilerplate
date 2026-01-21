@@ -1,30 +1,42 @@
 import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 import { User } from '@/types'
 
 interface AuthState {
   user: User | null
-  token: string | null
   isAuthenticated: boolean
   setUser: (user: User | null) => void
-  setToken: (token: string | null) => void
   logout: () => void
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
-  user: null,
-  token: localStorage.getItem('token'),
-  isAuthenticated: !!localStorage.getItem('token'),
-  setUser: (user) => set({ user, isAuthenticated: !!user }),
-  setToken: (token) => {
-    if (token) {
-      localStorage.setItem('token', token)
-    } else {
-      localStorage.removeItem('token')
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set) => ({
+      user: null,
+      isAuthenticated: false,
+      
+      setUser: (user) => set({ 
+        user, 
+        isAuthenticated: !!user 
+      }),
+      
+      logout: async () => {
+        // Chama o backend para limpar o cookie
+        await fetch('/api/logout', {
+          method: 'POST',
+          credentials: 'include' // Importante para enviar cookies
+        })
+        
+        set({ user: null, isAuthenticated: false })
+      },
+    }),
+    {
+      name: 'auth-storage',
+      // Persiste apenas o user, não o token
+      partialize: (state) => ({ 
+        user: state.user,
+        isAuthenticated: state.isAuthenticated 
+      })
     }
-    set({ token, isAuthenticated: !!token })
-  },
-  logout: () => {
-    localStorage.removeItem('token')
-    set({ user: null, token: null, isAuthenticated: false })
-  },
-}))
+  )
+)
