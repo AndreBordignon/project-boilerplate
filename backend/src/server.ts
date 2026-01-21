@@ -3,6 +3,7 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import routes from './routes'
 import { errorHandler } from './middlewares/errorHandler'
+import bannerRoutes from "./routes/banner.routes.js";
 
 dotenv.config()
 
@@ -16,6 +17,7 @@ app.use(cors({
 }))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+app.use("/uploads", express.static("uploads"));
 
 // Health check
 app.get('/health', (req, res) => {
@@ -24,6 +26,7 @@ app.get('/health', (req, res) => {
 
 // Routes
 app.use('/api', routes)
+app.use('/api', bannerRoutes)
 
 // Error handler (must be last)
 app.use(errorHandler)
