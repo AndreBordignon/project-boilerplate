@@ -60,4 +60,21 @@ router.get("/banners", async (req, res) => {
   }
 });
 
+router.delete('/banners/:id', async (req, res) => {
+  try {
+    const id = String(req.params.id)
+
+    if (!id) {
+      return res.status(400).json({ error: 'ID inválido' })
+    }
+
+    await prisma.banner.delete({
+      where: { id }
+    })
+
+    return res.status(200).json({ success: true })
+  } catch (error) {
+    return res.status(500).json({ error: 'Erro ao deletar banner' })
+  }
+})
 export default router;
