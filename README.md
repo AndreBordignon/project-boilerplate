@@ -147,6 +147,12 @@ O frontend estará rodando em `http://localhost:3000`
 - `PUT /api/users/:id` - Atualizar usuário
 - `DELETE /api/users/:id` - Deletar usuário
 
+### Banners (Requer autenticação)
+- `GET /api/banners` - Listar usuários
+- TODO `GET /api/banners/:id` - Buscar usuário
+- TODO `PUT /api/banners/:id` - Atualizar usuário
+- `DELETE /api/banners/:id` - Deletar usuário
+
 ### Contato
 - `POST /api/contact` - Enviar mensagem de contato
 
