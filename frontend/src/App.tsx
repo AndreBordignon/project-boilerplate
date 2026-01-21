@@ -8,6 +8,8 @@ import Login from './pages/Auth/Login'
 import Register from './pages/Auth/Register'
 import Dashboard from './pages/Dashboard/Dashboard' // ADICIONE ESTA LINHA
 import { ProtectedRoute } from './components/ProtectedRoute'
+import AdminLayout from './components/AdminLayout/AdminLayout'
+import CreateBanners from './pages/CreateBanners/CreateBanners'
 
 function App() {
   
@@ -24,15 +26,16 @@ function App() {
         </Route>
 
         {/* Rotas protegidas */}
-        <Route path="/painel-adm">
-          <Route 
-            index 
-            element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            } 
-          />
+        <Route path="/painel-adm" element={
+          <ProtectedRoute>
+            <AdminLayout />
+          </ProtectedRoute>
+        }>
+          <Route index element={<Dashboard />} />
+          {/* <Route path="criar-post" element={<CreatePost />} /> */}
+          <Route path="banners" element={<CreateBanners />} />
+          {/* <Route path="sobre" element={<EditAbout />} /> */}
+          {/* <Route path="contato" element={<EditContactInfo />} /> */}
         </Route>
       </Routes>
     </Router>
