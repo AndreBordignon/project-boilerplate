@@ -82,7 +82,14 @@ export class AuthController {
       )
 
       const { password: _, ...userWithoutPassword } = user
-
+      
+      res.cookie('token', token, {
+        httpOnly: true,      // Não acessível via JavaScript
+        secure: true,        // Apenas HTTPS (em produção)
+        sameSite: 'strict',  // Proteção CSRF
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 dias
+        path: '/'
+      })
       res.json({ token, user: userWithoutPassword })
     } catch (error) {
       console.error('Login error:', error)
