@@ -1,80 +1,20 @@
-import { Router } from "express";
-import { PrismaClient } from "@prisma/client";
-import { uploadBanner } from "../middlewares/uploadBanner.js";
+import { Router } from 'express'
+import { uploadBanner } from '../middlewares/uploadBanner.js'
+import { BannerController } from '../controllers/BannersController'
 
-const prisma = new PrismaClient();
-const router = Router();
+const router = Router()
+const bannerController = new BannerController()
 
-router.post(
-  "/banners",
-  uploadBanner.single("image"),
-  async (req, res) => {
-    try {
-      const { title, linkUrl } = req.body;
+router.post('/banners', uploadBanner.single('image'), (req, res) =>
+  bannerController.create(req, res)
+)
 
-      if (!req.file) {
-        return res.status(400).json({ error: "Imagem é obrigatória" });
-      }
+router.get('/banners', (req, res) => bannerController.getAll(req, res))
 
-      const banner = await prisma.banner.create({
-        data: {
-          title,
-          linkUrl,
-          imageUrl: `/uploads/banners/${req.file.filename}`
-        }
-      });
+router.patch('/banners/:id', uploadBanner.single('image'), (req, res) =>
+  bannerController.update(req, res)
+)
 
-      res.status(201).json(banner);
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: "Erro ao criar banner" });
-    }
-  }
-);
+router.delete('/banners/:id', (req, res) => bannerController.delete(req, res))
 
-router.get("/banners", async (req, res) => {
-  try {
-    const { title, isActive } = req.query;
-
-    const banners = await prisma.banner.findMany({
-      where: {
-        ...(title && {
-          title: {
-            contains: title,
-            mode: "insensitive"
-          }
-        }),
-        ...(isActive !== undefined && {
-          isActive: isActive === "true"
-        })
-      },
-      orderBy: {
-        createdAt: "desc"
-      }
-    });
-
-    res.status(200).json(banners);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Erro ao buscar banners" });
-  }
-});
-
-router.delete('/banners/:id', async (req, res) => {
-  try {
-    const id = String(req.params.id)
-
-    if (!id) {
-      return res.status(400).json({ error: 'ID inválido' })
-    }
-
-    await prisma.banner.delete({
-      where: { id }
-    })
-
-    return res.status(200).json({ success: true })
-  } catch (error) {
-    return res.status(500).json({ error: 'Erro ao deletar banner' })
-  }
-})
-export default router;
+export default router
