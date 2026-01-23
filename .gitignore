@@ -37,3 +37,6 @@ postgres_data/
 # OS
 .DS_Store
 Thumbs.db
+
+backend/uploads/*
+backend/prisma/migrations/*
