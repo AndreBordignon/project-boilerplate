@@ -67,7 +67,7 @@ export function BannerList() {
     if (data.linkUrl) formData.append("linkUrl", data.linkUrl);
     if (data.image) formData.append("image", data.image);
 
-    await api.put(`/banners/${editingBanner.id}`, formData, {
+    await api.patch(`/banners/${editingBanner.id}`, formData, {
       headers: { "Content-Type": "multipart/form-data" }
     });
 
@@ -76,7 +76,6 @@ export function BannerList() {
     reset();
     loadBanners();
   }
-
   return (
     <div className="m-10 space-y-6">
       <h2 className="text-2xl font-semibold">Banners</h2>
@@ -89,7 +88,7 @@ export function BannerList() {
           >
             <p className="font-bold text-xl mb-10">{banner.title}</p>
             <img
-              src={banner.imageUrl}
+              src={`${banner.imageUrl}`}
               alt="Banner"
               className="h-32 w-full rounded object-cover"
             />
