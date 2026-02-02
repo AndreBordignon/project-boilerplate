@@ -1,4 +1,7 @@
+import { useNavigate } from 'react-router-dom'
+
 export default function Footer() {
+  const navigate = useNavigate()
   return (
     <footer className="p-8 bg-background-dark text-white mt-auto">
       <div className="max-w-container mx-auto grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-8">
@@ -13,6 +16,7 @@ export default function Footer() {
             <li className="text-secondary-300 hover:text-white transition-colors cursor-pointer">Sobre</li>
             <li className="text-secondary-300 hover:text-white transition-colors cursor-pointer">Serviços</li>
             <li className="text-secondary-300 hover:text-white transition-colors cursor-pointer">Contato</li>
+            <li className="text-secondary-300 hover:text-white transition-colors cursor-pointer" onClick={() => navigate('/formulario')}>Formulário</li>
           </ul>
         </div>
         <div>
