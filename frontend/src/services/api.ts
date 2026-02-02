@@ -17,7 +17,7 @@ const getBaseURL = () => {
   
   // Se está em produção (HTTPS), usa HTTPS
   if (window.location.protocol === 'https:') {
-    return 'https://project-boilerplate-api.vercel.app/api'
+    return 'http://project-boilerplate-api.vercel.app/api'
   }
   
   // Em desenvolvimento local, usa HTTP
