@@ -2,7 +2,7 @@
 import { useAuthStore } from '@/store/authStore'
 import { Navigate } from 'react-router-dom'
 
-export function ProtectedRoute({ children }) {
+export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated  } = useAuthStore()
   console.log('auth', isAuthenticated)
   if (!isAuthenticated) {

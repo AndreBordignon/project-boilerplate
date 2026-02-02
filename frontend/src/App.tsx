@@ -22,6 +22,7 @@ function App() {
           <Route index element={<Home />} />
           <Route path="servicos" element={<Services />} />
           <Route path="contato" element={<Contact />} />
+          <Route path="sobre" element={<About />} />
           <Route path="formulario" element={<Form />} />
           <Route path="login" element={<Login />} />
           <Route path="cadastro" element={<Register />} />
