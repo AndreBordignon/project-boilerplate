@@ -41,11 +41,7 @@ export class AuthController {
       })
 
       // Generate token
-      const token = jwt.sign(
-        { userId: user.id },
-        process.env.JWT_SECRET || 'secret',
-        { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
-      )
+      const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET || 'secret', { expiresIn: Number(process.env.JWT_EXPIRES_IN) || 7 * 24 * 60 * 60 * 1000 })
 
       res.status(201).json({ token, user })
     } catch (error) {
@@ -75,12 +71,7 @@ export class AuthController {
       }
 
       // Generate token
-      const token = jwt.sign(
-        { userId: user.id },
-        process.env.JWT_SECRET || 'secret',
-        { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
-      )
-
+      const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET || 'secret', { expiresIn: Number(process.env.JWT_EXPIRES_IN) || 7 })
       const { password: _, ...userWithoutPassword } = user
       
       res.cookie('token', token, {
