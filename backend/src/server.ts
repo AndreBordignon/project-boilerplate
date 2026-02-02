@@ -11,10 +11,35 @@ const app = express()
 const PORT = process.env.PORT || 4000
 
 // Middlewares
-app.use(cors({
-  origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
-  credentials: true
-}))
+// Configuração de CORS mais permissiva para desenvolvimento
+const corsOptions = {
+  origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+    // Em desenvolvimento, permite qualquer origem HTTP
+    if (process.env.NODE_ENV === 'development' || !process.env.NODE_ENV) {
+      // Permite localhost em qualquer porta e HTTP
+      if (!origin || origin.startsWith('http://') || origin.startsWith('http://127.0.0.1')) {
+        callback(null, true)
+        return
+      }
+    }
+    
+    // Em produção, usa a lista de origens permitidas
+    const allowedOrigins = process.env.CORS_ORIGIN 
+      ? process.env.CORS_ORIGIN.split(',')
+      : ['http://']
+    
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}
+
+app.use(cors(corsOptions))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use("/uploads", express.static("uploads"));

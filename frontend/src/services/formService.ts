@@ -145,8 +145,23 @@ export async function submitForm(
   data: FormData,
   options: FormSubmissionOptions = {}
 ): Promise<{ success: boolean; message: string; method: string }> {
+  // Garante que usa HTTP em desenvolvimento
+  const getBackendUrl = () => {
+    const envUrl = import.meta.env.VITE_API_URL
+    if (envUrl) {
+      // Se já tem protocolo, usa como está
+      if (envUrl.startsWith('http://') || envUrl.startsWith('https://')) {
+        return envUrl
+      }
+      // Se não tem protocolo, adiciona http://
+      return `http://${envUrl}`
+    }
+    // Fallback para desenvolvimento local
+    return 'http://localhost:4000'
+  }
+
   const {
-    backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:4000',
+    backendUrl = getBackendUrl(),
     webhookUrl = import.meta.env.VITE_FORM_WEBHOOK_URL,
     emailTo = import.meta.env.VITE_FORM_EMAIL_TO,
     saveToLocalStorage = true,
