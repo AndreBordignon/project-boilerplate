@@ -145,36 +145,23 @@ export async function submitForm(
   data: FormData,
   options: FormSubmissionOptions = {}
 ): Promise<{ success: boolean; message: string; method: string }> {
-  // Detecta automaticamente HTTP ou HTTPS baseado no ambiente
-  const getBackendUrl = () => {
-    const envUrl = import.meta.env.VITE_API_URL
-    if (envUrl) {
-      // Se já tem protocolo, usa como está
-      if (envUrl.startsWith('http://') || envUrl.startsWith('https://')) {
-        return envUrl
-      }
-      // Se não tem protocolo, detecta se está em produção
-      const isProduction = typeof window !== 'undefined' && window.location.protocol === 'https:'
-      return `${isProduction ? 'https' : 'http'}://${envUrl}`
-    }
-    // Se está em produção (HTTPS), usa HTTPS
-    if (typeof window !== 'undefined' && window.location.protocol === 'https:') {
-      return 'https://project-boilerplate-api.vercel.app'
-    }
-    // Em desenvolvimento local, usa HTTP
-    return 'http://localhost:4000'
+  const env = import.meta.env as {
+    VITE_API_URL?: string
+    VITE_FORM_WEBHOOK_URL?: string
+    VITE_FORM_EMAIL_TO?: string
+    VITE_USE_BACKEND?: string
   }
 
   const {
-    backendUrl = getBackendUrl(),
-    webhookUrl = import.meta.env.VITE_FORM_WEBHOOK_URL,
-    emailTo = import.meta.env.VITE_FORM_EMAIL_TO,
+    backendUrl = env.VITE_API_URL || 'http://localhost:4000',
+    webhookUrl = env.VITE_FORM_WEBHOOK_URL,
+    emailTo = env.VITE_FORM_EMAIL_TO,
     saveToLocalStorage = true,
   } = options;
 
   try {
     // Prioridade 1: Enviar para backend próprio se configurado
-    if (backendUrl && import.meta.env.VITE_USE_BACKEND !== 'false') {
+    if (backendUrl && env.VITE_USE_BACKEND !== 'false') {
       await sendToBackend(data, backendUrl);
       
       if (saveToLocalStorage) {

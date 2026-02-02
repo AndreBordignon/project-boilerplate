@@ -1,31 +1,7 @@
 import axios from 'axios'
 
-// Função para determinar a URL base da API
-const getBaseURL = () => {
-  // Se há variável de ambiente configurada, usa ela
-  const envUrl = import.meta.env.VITE_API_URL
-  
-  if (envUrl) {
-    // Se já tem protocolo, usa como está
-    if (envUrl.startsWith('http://') || envUrl.startsWith('https://')) {
-      return envUrl
-    }
-    // Se não tem protocolo, detecta se está em produção
-    const isProduction = window.location.protocol === 'https:'
-    return `${isProduction ? 'https' : 'http'}://${envUrl}`
-  }
-  
-  // Se está em produção (HTTPS), usa HTTPS
-  if (window.location.protocol === 'https:') {
-    return 'https://project-boilerplate-api.vercel.app/api'
-  }
-  
-  // Em desenvolvimento local, usa HTTP
-  return 'http://localhost:4000/api'
-}
-
 const api = axios.create({
-  baseURL: getBaseURL(),
+  baseURL: (import.meta.env as { VITE_API_URL?: string }).VITE_API_URL || 'http://localhost:4000/api',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
