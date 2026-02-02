@@ -1,6 +1,6 @@
-# Configuração para Requisições HTTP em Desenvolvimento
+# Configuração de Requisições HTTP/HTTPS
 
-Este guia explica como configurar o projeto para fazer requisições HTTP (sem HTTPS) em ambiente de desenvolvimento/teste.
+Este guia explica como configurar o projeto para fazer requisições HTTP em desenvolvimento e HTTPS em produção automaticamente.
 
 ## ✅ O que foi configurado
 
@@ -125,10 +125,37 @@ const response = await api.post('/contact', {
 
 ## ⚠️ Importante
 
-- **Desenvolvimento:** Use HTTP (`http://localhost`)
-- **Produção:** Use HTTPS (`https://seusite.com`)
-- O código detecta automaticamente o ambiente
+- **Desenvolvimento:** Use HTTP (`http://localhost`) - detectado automaticamente
+- **Produção:** Use HTTPS (`https://seusite.com`) - detectado automaticamente
+- O código detecta automaticamente o protocolo da página (HTTP ou HTTPS)
 - Em produção, configure `CORS_ORIGIN` com as URLs corretas
+
+## 🌐 Configuração para Produção (Vercel/Netlify)
+
+### Variáveis de Ambiente na Vercel
+
+1. Vá para as configurações do seu projeto na Vercel
+2. Adicione as variáveis de ambiente:
+
+**Frontend:**
+```
+VITE_API_URL=https://project-boilerplate-api.vercel.app
+```
+
+**Backend:**
+```
+CORS_ORIGIN=https://project-boilerplate-navy.vercel.app
+NODE_ENV=production
+```
+
+### Como Funciona a Detecção Automática
+
+O código detecta automaticamente se está em produção verificando o protocolo da página:
+
+- Se `window.location.protocol === 'https:'` → usa HTTPS
+- Se `window.location.protocol === 'http:'` → usa HTTP
+
+Isso resolve o problema de **Mixed Content** automaticamente!
 
 ## 🐛 Troubleshooting
 

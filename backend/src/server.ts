@@ -14,10 +14,14 @@ const PORT = process.env.PORT || 4000
 // Configuração de CORS mais permissiva para desenvolvimento
 const corsOptions = {
   origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
-    // Em desenvolvimento, permite qualquer origem HTTP
+    // Em desenvolvimento, permite qualquer origem localhost (HTTP ou HTTPS)
     if (process.env.NODE_ENV === 'development' || !process.env.NODE_ENV) {
-      // Permite localhost em qualquer porta e HTTP
-      if (!origin || origin.startsWith('http://') || origin.startsWith('http://127.0.0.1')) {
+      // Permite localhost em qualquer porta, HTTP ou HTTPS
+      if (!origin || 
+          origin.startsWith('http://localhost') || 
+          origin.startsWith('https://localhost') ||
+          origin.startsWith('http://127.0.0.1') ||
+          origin.startsWith('https://127.0.0.1')) {
         callback(null, true)
         return
       }
@@ -25,8 +29,14 @@ const corsOptions = {
     
     // Em produção, usa a lista de origens permitidas
     const allowedOrigins = process.env.CORS_ORIGIN 
-      ? process.env.CORS_ORIGIN.split(',')
-      : ['http://']
+      ? process.env.CORS_ORIGIN.split(',').map(origin => origin.trim())
+      : []
+    
+    // Se não há origens configuradas e não há origin na requisição (ex: Postman), permite
+    if (!origin && allowedOrigins.length === 0) {
+      callback(null, true)
+      return
+    }
     
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true)

@@ -145,7 +145,7 @@ export async function submitForm(
   data: FormData,
   options: FormSubmissionOptions = {}
 ): Promise<{ success: boolean; message: string; method: string }> {
-  // Garante que usa HTTP em desenvolvimento
+  // Detecta automaticamente HTTP ou HTTPS baseado no ambiente
   const getBackendUrl = () => {
     const envUrl = import.meta.env.VITE_API_URL
     if (envUrl) {
@@ -153,10 +153,15 @@ export async function submitForm(
       if (envUrl.startsWith('http://') || envUrl.startsWith('https://')) {
         return envUrl
       }
-      // Se não tem protocolo, adiciona http://
-      return `http://${envUrl}`
+      // Se não tem protocolo, detecta se está em produção
+      const isProduction = typeof window !== 'undefined' && window.location.protocol === 'https:'
+      return `${isProduction ? 'https' : 'http'}://${envUrl}`
     }
-    // Fallback para desenvolvimento local
+    // Se está em produção (HTTPS), usa HTTPS
+    if (typeof window !== 'undefined' && window.location.protocol === 'https:') {
+      return 'https://project-boilerplate-api.vercel.app'
+    }
+    // Em desenvolvimento local, usa HTTP
     return 'http://localhost:4000'
   }
 
