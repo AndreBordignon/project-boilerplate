@@ -36,6 +36,7 @@ model Contact {
   email     String
   phone     String
   message   String   @db.Text
+  type      String   @default("contact")
   createdAt DateTime @default(now())
 
   @@map("contacts")

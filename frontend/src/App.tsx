@@ -6,6 +6,7 @@ import Services from './pages/Services/Services'
 import Contact from './pages/Contact/Contact'
 import Login from './pages/Auth/Login'
 import Register from './pages/Auth/Register'
+import Form from './pages/Form/Form'
 import Dashboard from './pages/Dashboard/Dashboard' // ADICIONE ESTA LINHA
 import { ProtectedRoute } from './components/ProtectedRoute'
 import AdminLayout from './components/AdminLayout/AdminLayout'
@@ -21,6 +22,7 @@ function App() {
           <Route index element={<Home />} />
           <Route path="servicos" element={<Services />} />
           <Route path="contato" element={<Contact />} />
+          <Route path="formulario" element={<Form />} />
           <Route path="login" element={<Login />} />
           <Route path="cadastro" element={<Register />} />
         </Route>
